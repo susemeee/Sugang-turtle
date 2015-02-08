@@ -31,9 +31,7 @@ class SugangTurtle(object):
         current_thread().name = 'MAIN'
         root_logger = logging.getLogger()
         root_logger.level = config.log_level
-        log_formatter = logging.Formatter(
-            "%(asctime)s [%(levelname)-5.5s]"
-            " [%(threadName)s]  %(message)s")
+        log_formatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s] [%(threadName)s]  %(message)s")
         file_handler = logging.FileHandler('tmp/stdout.log')
         file_handler.setFormatter(log_formatter)
         root_logger.addHandler(file_handler)
@@ -43,21 +41,23 @@ class SugangTurtle(object):
 
         school = config.SCHOOL
         if not util.verify(school):
-            print "학번 정보를 정확히 입력해 주세요."
+            print u"학번 정보를 정확히 입력해 주세요."
             sys.exit(1)
 
         s = util.get_semester()['semester']
         if s == "1R":      
-            print "현재 학기는 1학기 입니다."
+            print u"현재 학기는 1학기 입니다."
         else:
-            print "현재 학기는 2학기 입니다."
+            print u"현재 학기는 2학기 입니다."
 
         # log in to sugang server
         id = school['portal_account']['account']
         pw = school['portal_account']['password']
         if not parser.login(id, pw):
-            print "로그인에 실패하였습니다."
+            print u"교내 포탈 로그인에 실패하였습니다."
             sys.exit(1)
+        else:
+            logging.info(u"포탈 로그인에 성공하였습니다.")
 
         # connect smtp server
         self.connected = connect_mail(server=config.EMAIL['SMTP_SERVER'],
@@ -87,7 +87,7 @@ class SugangTurtle(object):
 
     def handle_parser(self, school, **kwargs):
         course_name = kwargs['course_name']
-        current_thread().name = course_name
+        current_thread().name = util.encode(course_name)
 
         kwargs['grade'] = school['grade']
         kwargs = dict(kwargs.items() + util.get_semester().items())
@@ -101,8 +101,10 @@ class SugangTurtle(object):
                     'current': result['current'],
                     'total': result['total']
                 })
+            else:
+                logging.info("Current : {0}, Total : {1}".format(result['current'], result['total']))
         else:
-            logging.warning("Parse failed, Reason : {0}".format(result['message']))
+            logging.error("Parse failed, Reason : {0}".format(util.encode(result['message'])))
 
         # 계속해서 알랴주지 않도록 result는 저장해 놓는다
         util.save_cache(result)

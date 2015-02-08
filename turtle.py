@@ -64,15 +64,16 @@ SCHOOL = {
 }
 
 # 지켜 볼 학수번호를 입력합니다.
+# [주의] course_name 항목 앞에는 u가 붙어야 합니다.
 TARGET_COURSE = [
     {
         'course_id': 'SPGE195',
-        'course_name': 'Campus CEO 2.0(Ⅱ)',
+        'course_name': u'Campus CEO 2.0(Ⅱ)',
         'class': '00'
     },
     {
         'course_id': 'COSE211',
-        'course_name': '이산수학(영강)',
+        'course_name': u'이산수학(영강)',
         'class': '01'
     }
 ]

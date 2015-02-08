@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 from datetime import datetime
+import sys
 
 def get_semester():
     now = datetime.now()
@@ -25,9 +26,14 @@ def verify(school):
 
     return True
 
+def encode(string):
+    if sys.stdout.encoding == "cp949":
+        return string.encode("cp949")
+    else:
+        return string.encode("utf-8")
 
 def get_content(course_name, current, total):
-    return """
+    return u"""
 <html>
 <head>
 <style>

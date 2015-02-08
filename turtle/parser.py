@@ -16,9 +16,10 @@ def login(snumber, password):
             "id" : snumber,
             "pw" : password
         }
+
         success, data = get_data(url, params, method="POST", referer="http://sugang.korea.ac.kr/SugangLogin.html")
 
-        if u"학번 또는 암호가 틀리거나 존재하지 않습니다" in data:
+        if data and u"학번 또는 암호가 틀리거나 존재하지 않습니다" in data:
             success = False
         else:
             logged_in = True
@@ -31,7 +32,7 @@ def login(snumber, password):
 def query(request):
     global logged_in
     message = ""
-    
+
     if logged_in:
         info_url = "http://sugang.korea.ac.kr/lecture/LecLmtInfoUniv.jsp?courcd={0}&courcls={1}&year={2}&term={3}"
         info_url = info_url.format(request['course_id'], request['class'], request['year'], request['semester'])
@@ -63,7 +64,7 @@ def query(request):
 
         except IndexError:
             d['success'] = False
-            d['message'] = "잘못된 학수번호를 입력하였습니다."
+            d['message'] = u"잘못된 학수번호를 입력하였습니다."
 
     return d
 
@@ -74,7 +75,7 @@ def get_data(url, params={}, method="GET", referer=None):
     try:
         if referer:
             session.headers.update({'Referer' : referer})
-
+        
         # 고려대학교 수강신청 시스템은 신뢰하지 않는 Root CA를 사용하기 때문에, SSL Verification 끔
         if method == "GET":
             data = session.get(url, params=params, verify=False).text
