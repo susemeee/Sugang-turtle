@@ -14,13 +14,16 @@ Gmail 앱과 같이 사용하면 금상첨화!
 
 ### 1. Python을 설치합니다. 
 * Sugang Turtle은 Python 2.7.x에서 동작합니다.
+
+* **주의: Python 2.7.9에는 현재 gevent 관련 문제가 있어 정상적으로 동작하지 않습니다. 2.7.8 이하의 버전으로 설치해 주세요.**
+
 * [https://www.python.org](https://www.python.org) 
 
 ### 2. 의존하는 라이브러리를 설치합니다.
 
 1) pip를 설치합니다. [https://pip.pypa.io/en/latest/installing.html](https://pip.pypa.io/en/latest/installing.html)
 
-(Python 2.7.9부터는 pip가 설치되어 있기 때문에 설치하지 않으셔도 됩니다.)
+~~(Python 2.7.9부터는 pip가 설치되어 있기 때문에 설치하지 않으셔도 됩니다.)~~
 
 2) SugangTurtle이 있는 곳으로 현재 디렉터리를 옮깁니다.
 	
