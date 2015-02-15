@@ -51,13 +51,7 @@ class SugangTurtle(object):
             print u"현재 학기는 2학기 입니다."
 
         # log in to sugang server
-        id = school['portal_account']['account']
-        pw = school['portal_account']['password']
-        if not parser.login(id, pw):
-            print u"교내 포탈 로그인에 실패하였습니다."
-            sys.exit(1)
-        else:
-            logging.info(u"포탈 로그인에 성공하였습니다.")
+        self.login(school)
 
         # connect smtp server
         self.connected = connect_mail(server=config.EMAIL['SMTP_SERVER'],
@@ -85,6 +79,16 @@ class SugangTurtle(object):
             print 'Sugangturtle stopped'
             sys.exit(0)
 
+    def login(self, school):
+        id = school['portal_account']['account']
+        pw = school['portal_account']['password']
+        if not parser.login(id, pw):
+            print u"교내 포탈 로그인에 실패하였습니다."
+            sys.exit(1)
+        else:
+            print u"포탈 로그인에 성공하였습니다."
+
+
     def handle_parser(self, school, **kwargs):
         course_name = kwargs['course_name']
         current_thread().name = util.encode(course_name)
@@ -105,6 +109,9 @@ class SugangTurtle(object):
                 logging.info("Current : {0}, Total : {1}".format(result['current'], result['total']))
         else:
             logging.error("Parse failed, Reason : {0}".format(util.encode(result['message'])))
+            if result['message'] == "Not logged in":
+                # log in again
+                self.login(school)
 
         # 계속해서 알랴주지 않도록 result는 저장해 놓는다
         util.save_cache(result)

@@ -47,24 +47,30 @@ def query(request):
     }
     if success:
         data = data.replace('&nbsp;', '')
-        data = BeautifulSoup(data)
-
-        try:
-            data = data.select('table')[0]
-
-            if all([trim(data.select('td:nth-of-type({0})'.format(i*3))[0].text) == u"-" for i in range(1,5)]):
-                # 정원만 보면 됨
-                cols = data.select('tr')[-1].select('td')
-            else:
-                # 아니면 학년을 보던가
-                cols = data.select('tr')[request['grade']].select('td')
-
-            d['current'] = int(trim(cols[1].text))
-            d['total'] = int(trim(cols[2].text))
-
-        except IndexError:
+        
+        if u"로그인" in data:
             d['success'] = False
-            d['message'] = u"잘못된 학수번호를 입력하였습니다."
+            d['message'] = "Not logged in"
+            logged_in = False
+        else:
+            data = BeautifulSoup(data)
+
+            try:
+                data = data.select('table')[0]
+
+                if all([trim(data.select('td:nth-of-type({0})'.format(i*3))[0].text) == u"-" for i in range(1,5)]):
+                    # 정원만 보면 됨
+                    cols = data.select('tr')[-1].select('td')
+                else:
+                    # 아니면 학년을 보던가
+                    cols = data.select('tr')[request['grade']].select('td')
+
+                d['current'] = int(trim(cols[1].text))
+                d['total'] = int(trim(cols[2].text))
+
+            except IndexError:
+                d['success'] = False
+                d['message'] = u"잘못된 학수번호를 입력하였습니다."
 
     return d
 
@@ -87,9 +93,7 @@ def get_data(url, params={}, method="GET", referer=None):
     except Exception, e:
         print e
         success = False
-        data = None
-        # if e.getcode() == 500:
-        #     data = e.read()
+        data = e.__repr__()
         
     return success, data
 
