@@ -1,6 +1,7 @@
 /tmp
 /build
 /dist
+dist.7z
 *.pyc
 exp.py
 config.py
