@@ -1,4 +1,9 @@
-/tmp/
+/tmp
+/build
+/dist
 *.pyc
 exp.py
 config.py
+config.pyc
+
+/turtle/action.py
