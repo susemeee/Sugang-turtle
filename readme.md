@@ -12,6 +12,8 @@ Gmail 앱과 같이 사용하면 금상첨화!
 
 ## 사용하는 법
 
+**아래의 설명 대신 Release Version (py2exe 사용)을 사용하여 조금 더 편하게 이용해 보세요.**
+
 ### 1. Python을 설치합니다. 
 * Sugang Turtle은 Python 2.7.x에서 동작합니다.
 
